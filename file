@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EARN MONEY</title>
+<style>
+  body {
+    font-family: "Poppins", sans-serif;
+    background: linear-gradient(135deg, #8e2de2, #4a00e0);
+    color: white;
+    text-align: center;
+    padding: 20px;
+  }
+
+  .app-container {
+    max-width: 400px;
+    margin: auto;
+    background: rgba(255,255,255,0.1);
+    padding: 25px;
+    border-radius: 20px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+  }
+
+  h1 {
+    font-size: 28px;
+    margin-bottom: 8px;
+    text-shadow: 0 0 12px #fff;
+  }
+
+  .status {
+    margin: 10px 0;
+    font-size: 16px;
+  }
+
+  .tagline {
+    margin-top: 10px;
+    font-size: 14px;
+    font-style: italic;
+    opacity: 0.9;
+  }
+
+  .ad-btn {
+    background: linear-gradient(90deg, #00c6ff, #0072ff);
+    color: white;
+    border: none;
+    padding: 12px 22px;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: bold;
+    margin-top: 20px;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    transition: all 0.2s;
+  }
+
+  .ad-btn:hover {
+    transform: scale(1.05);
+    background: linear-gradient(90deg, #0072ff, #00c6ff);
+  }
+
+  .nav {
+    margin-top: 25px;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .nav button {
+    flex: 1;
+    background: linear-gradient(145deg, #ff512f, #dd2476);
+    border: none;
+    padding: 10px;
+    border-radius: 12px;
+    color: white;
+    font-weight: bold;
+    box-shadow: 3px 3px 10px rgba(0,0,0,0.3);
+    transition: all 0.2s;
+    cursor: pointer;
+  }
+
+  .nav button:hover {
+    transform: scale(1.1);
+    background: linear-gradient(145deg, #dd2476, #ff512f);
+  }
+
+  /* Withdraw Modal */
+  .modal {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.6);
+    justify-content: center;
+    align-items: center;
+  }
+
+  .modal-content {
+    background: white;
+    color: black;
+    padding: 20px;
+    border-radius: 15px;
+    width: 90%;
+    max-width: 350px;
+  }
+
+  .modal-content select, .modal-content input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+  }
+
+  .close {
+    background: red;
+    color: white;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+
+  .withdraw-btn {
+    background: linear-gradient(90deg, #00b09b, #96c93d);
+    border: none;
+    padding: 10px 20px;
+    color: white;
+    border-radius: 10px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+
+  .refer-box {
+    background: rgba(255,255,255,0.15);
+    border-radius: 12px;
+    padding: 10px;
+    margin-top: 15px;
+  }
+
+  .refer-box input {
+    width: 100%;
+    padding: 8px;
+    border: none;
+    border-radius: 8px;
+    margin-bottom: 8px;
+  }
+
+  .copy-btn {
+    background: #00c853;
+    border: none;
+    color: white;
+    padding: 6px 10px;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+</style>
+</head>
+<body>
+
+<div class="app-container">
+  <h1>💸 EARN MONEY 💸</h1>
+  <div class="status">
+    <p>বর্তমান ব্যালেন্স: <span id="balance">৳25.00</span></p>
+    <p>দেখা বিজ্ঞাপন: <span id="adsSeen">0</span></p>
+  </div>
+
+  <p class="tagline">✨ বিজ্ঞাপন দেখুন, ইনকাম করুন, নিজের সময়কে মূল্য দিন! ✨</p>
+
+  <button class="ad-btn" onclick="watchAd()">▶️ Watch Ad</button>
+
+  <div class="refer-box" id="referBox" style="display:none;">
+    <h3>👥 Refer & Earn</h3>
+    <input type="text" id="referLink" readonly value="https://t.me/YourBot?start=ref123">
+    <button class="copy-btn" onclick="copyRefer()">Copy Link</button>
+    <p>Total Refers: <span id="refCount">0</span></p>
+    <p>Refer Income: ৳<span id="refIncome">0</span></p>
+  </div>
+
+  <div class="nav">
+    <button onclick="goHome()">🏠 Home</button>
+    <button onclick="support()">💬 Support</button>
+    <button onclick="toggleRefer()">👥 Refer</button>
+    <button onclick="openWithdraw()">💰 Withdraw</button>
+  </div>
+</div>
+
+<!-- Withdraw Modal -->
+<div id="withdrawModal" class="modal">
+  <div class="modal-content">
+    <h3>💵 Withdraw Request</h3>
+    <select id="bankOption">
+      <option value="bkash">bKash</option>
+      <option value="nagad">Nagad</option>
+    </select>
+    <input type="text" id="accName" placeholder="Account Name লিখুন">
+    <input type="text" id="accNumber" placeholder="Account Number লিখুন">
+    <button class="withdraw-btn" onclick="submitWithdraw()">Submit Withdraw</button>
+    <br><br>
+    <button class="close" onclick="closeWithdraw()">Close</button>
+  </div>
+</div>
+
+<p style="margin-top:20px;">Powered by Telegram Mini App ✨</p>
+
+<!-- Monetag SDK -->
+<script src='//libtl.com/sdk.js' data-zone='10095726' data-sdk='show_10095726'></script>
+
+<script>
+let balance = 25;
+let adsSeen = 0;
+let refCount = 0;
+let refIncome = 0;
+
+function watchAd() {
+  show_10095726();
+  adsSeen++;
+  balance += 2;
+  document.getElementById("balance").innerText = "৳" + balance.toFixed(2);
+  document.getElementById("adsSeen").innerText = adsSeen;
+}
+
+function goHome() {
+  document.getElementById("referBox").style.display = "none";
+  alert("🏠 আপনি এখন হোমে আছেন!");
+}
+
+function support() {
+  window.open("https://t.me/shameulbashir", "_blank");
+}
+
+function toggleRefer() {
+  const box = document.getElementById("referBox");
+  if (box.style.display === "none") {
+    box.style.display = "block";
+  } else {
+    box.style.display = "none";
+  }
+}
+
+function copyRefer() {
+  const copyText = document.getElementById("referLink");
+  copyText.select();
+  copyText.setSelectionRange(0, 99999);
+  document.execCommand("copy");
+  refCount++;
+  refIncome += 30;
+  balance += 30;
+  document.getElementById("refCount").innerText = refCount;
+  document.getElementById("refIncome").innerText = refIncome;
+  document.getElementById("balance").innerText = "৳" + balance.toFixed(2);
+  alert("✅ Refer Link Copied! ৩০ টাকা যুক্ত হয়েছে!");
+}
+
+function openWithdraw() {
+  document.getElementById("withdrawModal").style.display = "flex";
+}
+
+function closeWithdraw() {
+  document.getElementById("withdrawModal").style.display = "none";
+}
+
+function submitWithdraw() {
+  const method = document.getElementById("bankOption").value;
+  const name = document.getElementById("accName").value;
+  const num = document.getElementById("accNumber").value;
+  if(name && num){
+    alert(`✅ Withdraw Request Sent!\nMethod: ${method}\nName: ${name}\nNumber: ${num}`);
+    closeWithdraw();
+  } else {
+    alert("⚠️ সব তথ্য পূরণ করুন!");
+  }
+}
+</script>
+</body>
+</html>
